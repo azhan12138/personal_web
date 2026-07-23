@@ -66,12 +66,104 @@ function Hero() {
   );
 }
 
+function Education() {
+  const { education } = siteContent;
+
+  return (
+    <section
+      className="education shell section-rule"
+      id="education"
+      aria-labelledby="education-title"
+    >
+      <div className="section-intro">
+        <p className="section-index">{education.eyebrow}</p>
+        <div>
+          <h2 id="education-title">
+            {education.heading[0]}
+            <br />
+            {education.heading[1]}
+          </h2>
+          <p>{education.introduction}</p>
+        </div>
+      </div>
+
+      <div className="education-list">
+        {education.entries.map((entry) => (
+          <article className="education-entry" key={entry.school}>
+            <div className="education-period">
+              <time dateTime={entry.dateTime}>{entry.period}</time>
+              <span>
+                {entry.stage} · {entry.city}
+              </span>
+            </div>
+
+            <div className="education-school">
+              <p>{entry.schoolEn}</p>
+              <h3>{entry.school}</h3>
+              <span className="education-college">{entry.college}</span>
+              <strong>{entry.degree}</strong>
+              <span className="education-summary">{entry.summary}</span>
+            </div>
+
+            <div className="education-details">
+              <div className="education-detail">
+                <p>核心课程 / COURSEWORK</p>
+                <ul className="tag-list">
+                  {entry.courses.map((course) => (
+                    <li key={course}>{course}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {entry.focus ? (
+                <div className="education-detail">
+                  <p>当前研究关注 / CURRENT FOCUS</p>
+                  <p className="detail-copy">{entry.focus}</p>
+                </div>
+              ) : null}
+
+              {entry.honors ? (
+                <div className="education-detail">
+                  <p>代表荣誉 / HONORS</p>
+                  <ul className="tag-list honor-list">
+                    {entry.honors.map((honor) => (
+                      <li key={honor}>{honor}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {entry.competitions ? (
+                <div className="education-detail">
+                  <p>代表竞赛 / COMPETITIONS</p>
+                  <ol className="competition-list">
+                    {entry.competitions.map((competition) => (
+                      <li key={competition.name}>
+                        <time dateTime={competition.year}>
+                          {competition.year}
+                        </time>
+                        <span>{competition.name}</span>
+                        <strong>{competition.result}</strong>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ) : null}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function App() {
   return (
     <>
       <SiteHeader />
       <main id="top">
         <Hero />
+        <Education />
       </main>
     </>
   );

@@ -42,3 +42,97 @@ test("production page does not expose prototype controls", async ({ page }) => {
   await expect(page.getByText("Research Brief / 研究简报")).toHaveCount(0);
   await expect(page.getByText("Open Notebook / 开放笔记")).toHaveCount(0);
 });
+
+for (const viewport of viewports) {
+  test(`education is complete and readable on ${viewport.name}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("./");
+
+    const mainSections = page.locator("main > section");
+    await expect(mainSections.nth(1)).toHaveAttribute("id", "education");
+
+    const education = page.locator("#education");
+    await expect(
+      education.getByRole("heading", {
+        level: 2,
+        name: /教育经历.*理解问题的起点/s,
+      }),
+    ).toBeVisible();
+
+    const sjtu = education.getByRole("article").filter({
+      has: page.getByRole("heading", { name: "上海交通大学" }),
+    });
+    await expect(sjtu).toContainText("2025.09 — 2028.03");
+    await expect(sjtu).toContainText("安泰经济与管理学院");
+    await expect(sjtu).toContainText("管理科学与工程 · 硕士");
+    for (const course of [
+      "运筹学：确定性模型",
+      "运筹学：随机性模型",
+      "计算文本分析",
+      "强化学习",
+      "多元统计分析",
+      "智能体建模与仿真",
+    ]) {
+      await expect(sjtu.getByText(course, { exact: true })).toBeVisible();
+    }
+    await expect(sjtu).toContainText("相关研究仍在进行中");
+
+    const swufe = education.getByRole("article").filter({
+      has: page.getByRole("heading", { name: "西南财经大学" }),
+    });
+    await expect(swufe).toContainText("2021.09 — 2025.06");
+    await expect(swufe).toContainText("管理科学与工程学院");
+    await expect(swufe).toContainText("大数据管理与应用 · 学士");
+    for (const item of [
+      "机器学习与数据挖掘",
+      "统计学",
+      "Python 程序设计",
+      "数据库原理与应用",
+      "管理决策模型与方法",
+      "数据智能前沿",
+      "本科生国家奖学金",
+      "四川省优秀毕业生",
+      "感恩科学家奖学金",
+      "校级三好学生",
+      "全国市场调查与分析大赛",
+      "四川省一等奖",
+      "全国企业竞争模拟大赛",
+      "全国三等奖",
+    ]) {
+      await expect(swufe.getByText(item, { exact: true })).toBeVisible();
+    }
+
+    const pageWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
+    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+  });
+}
+
+test("education navigation lands below the header without private metrics", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("link", { name: "教育 / Education" }).click();
+
+  await expect(page).toHaveURL(/#education$/);
+  await expect(page.locator("#education")).toBeInViewport();
+  await expect(page.locator("#education")).toHaveCSS(
+    "scroll-margin-top",
+    /[1-9]\d*px/,
+  );
+
+  const body = page.locator("body");
+  for (const privateMetric of [
+    "GPA",
+    "专业排名",
+    "单科成绩",
+    "CET",
+    "六级",
+    "四级",
+  ]) {
+    await expect(body).not.toContainText(privateMetric);
+  }
+});
