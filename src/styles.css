@@ -495,7 +495,8 @@ a:focus-visible {
   font-size: 11px;
 }
 
-.competition-list time {
+.competition-list time,
+.competition-year {
   color: var(--teal);
   font-family: var(--serif);
   font-size: 15px;
