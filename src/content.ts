@@ -20,7 +20,7 @@ export interface HeroContent {
 }
 
 export interface Competition {
-  readonly year: string;
+  readonly year?: string;
   readonly name: string;
   readonly result: string;
 }
@@ -199,6 +199,10 @@ export const siteContent: SiteContent = {
             year: "2023",
             name: "全国企业竞争模拟大赛",
             result: "全国三等奖",
+          },
+          {
+            name: "全国大学生数学竞赛",
+            result: "省级一等奖",
           },
         ],
       },

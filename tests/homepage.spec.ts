@@ -114,6 +114,8 @@ for (const viewport of viewports) {
       "四川省一等奖",
       "全国企业竞争模拟大赛",
       "全国三等奖",
+      "全国大学生数学竞赛",
+      "省级一等奖",
     ]) {
       await expect(swufe.getByText(item, { exact: true })).toBeVisible();
     }

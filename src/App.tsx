@@ -185,9 +185,18 @@ function Education() {
                   <ol className="competition-list">
                     {entry.competitions.map((competition) => (
                       <li key={competition.name}>
-                        <time dateTime={competition.year}>
-                          {competition.year}
-                        </time>
+                        {competition.year ? (
+                          <time dateTime={competition.year}>
+                            {competition.year}
+                          </time>
+                        ) : (
+                          <span
+                            className="competition-year"
+                            aria-label="年份未标注"
+                          >
+                            —
+                          </span>
+                        )}
                         <span>{competition.name}</span>
                         <strong>{competition.result}</strong>
                       </li>
