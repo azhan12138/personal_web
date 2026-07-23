@@ -53,8 +53,9 @@ Spec.
   narrow columns. Long school, degree, and project strings wrap naturally.
 - Imagery: portrait and project media keep their intended aspect ratios. The
   three Sprout screens remain legible as a grouped product view.
-- Navigation and tap targets: the compact header keeps the essential Education,
-  Journey, and Contact routes visible; hero actions become full-width targets.
+- Navigation and tap targets: the compact header keeps all four primary routes
+  visible as readable Chinese labels; their accessible names retain the full
+  bilingual wording. Hero actions become full-width targets.
 - Intentional difference: the source's floating prototype switcher obscures part
   of the portrait, while production correctly removes it.
 
@@ -95,6 +96,11 @@ Spec.
    throwaway variant switcher over the portrait. It was verified as an
    intentional source artifact and remains excluded from production per the
    Spec.
+4. **P2 — Mobile navigation readability:** restoring all four bilingual routes
+   in one row initially reduced the labels to `8px`. The mobile presentation now
+   uses readable `11px` Chinese labels with 40px-high targets, while accessible
+   names retain the complete bilingual wording. The final `390 × 844` capture
+   confirms all four routes fit without crowding or overflow.
 
 No unresolved P0, P1, or P2 findings remain.
 

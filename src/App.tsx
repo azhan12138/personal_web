@@ -44,11 +44,20 @@ function SiteHeader() {
           L·SZ
         </a>
         <div className="nav-links">
-          {siteContent.navigation.map((item) => (
-            <a href={item.href} key={item.href}>
-              {item.label}
-            </a>
-          ))}
+          {siteContent.navigation.map((item) => {
+            const [chineseLabel, englishLabel] = item.label.split(" / ");
+
+            return (
+              <a
+                href={item.href}
+                key={item.href}
+                aria-label={item.label}
+              >
+                <span>{chineseLabel}</span>
+                <span className="nav-english"> / {englishLabel}</span>
+              </a>
+            );
+          })}
         </div>
       </nav>
     </header>

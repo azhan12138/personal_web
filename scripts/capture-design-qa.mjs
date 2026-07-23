@@ -5,18 +5,17 @@ import { chromium } from "@playwright/test";
 const siteConfig = JSON.parse(
   await readFile(new URL("../site.config.json", import.meta.url), "utf8"),
 );
+const qaConfig = JSON.parse(
+  await readFile(new URL("../qa.config.json", import.meta.url), "utf8"),
+);
 const targetUrl =
   process.env.QA_URL ??
   new URL(siteConfig.basePath, "http://127.0.0.1:4173").href;
 const outputDirectory = new URL("../qa/screenshots/", import.meta.url);
 const sourceDirectory = new URL("../prototype/screenshots/", import.meta.url);
-const viewports = [
-  { name: "desktop", width: 1440, height: 1000 },
-  { name: "tablet", width: 768, height: 1024 },
-  { name: "mobile", width: 390, height: 844 },
-];
+const viewports = qaConfig.viewports;
 const comparisonViewports = viewports.filter(
-  (viewport) => viewport.name !== "tablet",
+  (viewport) => viewport.compareToSource,
 );
 
 await mkdir(outputDirectory, { recursive: true });

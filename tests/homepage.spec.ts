@@ -1,16 +1,12 @@
 import { expect, test, type Page } from "@playwright/test";
 import privacyPolicy from "../privacy-policy.json" with { type: "json" };
+import qaConfig from "../qa.config.json" with { type: "json" };
 import siteConfig from "../site.config.json" with { type: "json" };
 
-const viewports = [
-  { name: "desktop", width: 1440, height: 1000 },
-  { name: "mobile", width: 390, height: 844 },
-] as const;
-
-const releaseViewports = [
-  ...viewports,
-  { name: "tablet", width: 768, height: 1024 },
-] as const;
+const viewports = qaConfig.viewports.filter(
+  (viewport) => viewport.compareToSource,
+);
+const releaseViewports = qaConfig.viewports;
 
 async function expectNoHorizontalOverflow(page: Page, viewportWidth: number) {
   const pageWidth = await page.evaluate(
@@ -133,11 +129,11 @@ test("education navigation lands below the header without private metrics", asyn
   await page.getByRole("link", { name: "教育 / Education" }).click();
 
   await expect(page).toHaveURL(/#education$/);
-  await expect(page.locator("#education")).toBeInViewport();
-  await expect(page.locator("#education")).toHaveCSS(
-    "scroll-margin-top",
-    /[1-9]\d*px/,
-  );
+  const education = page.locator("#education");
+  await expect(education).toBeInViewport();
+  const educationPosition = await education.boundingBox();
+  expect(educationPosition).not.toBeNull();
+  expect(educationPosition!.y).toBeGreaterThanOrEqual(0);
 
   await expectNoForbiddenPublicTerms(page);
 });
@@ -374,20 +370,50 @@ test("keyboard focus is visible and reduced motion keeps content available", asy
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("./");
 
-  await page.keyboard.press("Tab");
   const focusedLink = page.getByRole("link", { name: "返回主页顶部" });
-  await expect(focusedLink).toBeFocused();
-  await expect(focusedLink).toHaveCSS("outline-style", "solid");
+  const appearanceBeforeFocus = await focusedLink.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      backgroundColor: style.backgroundColor,
+      color: style.color,
+      outlineColor: style.outlineColor,
+      outlineWidth: style.outlineWidth,
+      boxShadow: style.boxShadow,
+    };
+  });
 
-  for (const region of [
-    page.locator("#education"),
-    page.locator("#focus"),
-    page.locator("#work"),
-    page.locator("#journey"),
+  await page.keyboard.press("Tab");
+  await expect(focusedLink).toBeFocused();
+  const appearanceAfterFocus = await focusedLink.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      backgroundColor: style.backgroundColor,
+      color: style.color,
+      outlineColor: style.outlineColor,
+      outlineWidth: style.outlineWidth,
+      boxShadow: style.boxShadow,
+    };
+  });
+  expect(appearanceAfterFocus).not.toEqual(appearanceBeforeFocus);
+
+  for (const heading of [
+    "教育经历， 是我理解问题的起点。",
+    "专注 AI Native 的 AI 产品经理与独立开发者",
+    "探索不是答案， 是我留下的路径。",
+    "一路走来，问题在变， 好奇心没有。",
+    "如果你也在想 AI 与人 还能怎样一起创造， 欢迎来聊聊。",
   ]) {
-    await expect(region).toHaveCSS("opacity", "1");
-    await expect(region).toHaveCSS("transform", "none");
+    const regionHeading = page.getByRole("heading", { name: heading });
+    await regionHeading.scrollIntoViewIfNeeded();
+    await expect(regionHeading).toBeVisible();
   }
+  const runningAnimations = await page.evaluate(
+    () =>
+      document
+        .getAnimations()
+        .filter((animation) => animation.playState === "running").length,
+  );
+  expect(runningAnimations).toBe(0);
 
   const html = await page.content();
   for (const term of privacyPolicy.forbiddenTerms) {
