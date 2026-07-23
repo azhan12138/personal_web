@@ -1,4 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+import privacyPolicy from "../privacy-policy.json" with { type: "json" };
+import siteConfig from "../site.config.json" with { type: "json" };
 
 const viewports = [
   { name: "desktop", width: 1440, height: 1000 },
@@ -9,6 +11,20 @@ const releaseViewports = [
   ...viewports,
   { name: "tablet", width: 768, height: 1024 },
 ] as const;
+
+async function expectNoHorizontalOverflow(page: Page, viewportWidth: number) {
+  const pageWidth = await page.evaluate(
+    () => document.documentElement.scrollWidth,
+  );
+  expect(pageWidth).toBeLessThanOrEqual(viewportWidth);
+}
+
+async function expectNoForbiddenPublicTerms(page: Page) {
+  const body = page.locator("body");
+  for (const term of privacyPolicy.forbiddenTerms) {
+    await expect(body).not.toContainText(term);
+  }
+}
 
 for (const viewport of viewports) {
   test(`visitor can understand the homepage identity on ${viewport.name}`, async ({
@@ -33,10 +49,7 @@ for (const viewport of viewports) {
       page.getByRole("img", { name: "罗仕展在思考者雕塑前的照片" }),
     ).toBeVisible();
 
-    const pageWidth = await page.evaluate(
-      () => document.documentElement.scrollWidth,
-    );
-    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+    await expectNoHorizontalOverflow(page, viewport.width);
   });
 }
 
@@ -69,7 +82,7 @@ for (const viewport of viewports) {
     const sjtu = education.getByRole("article").filter({
       has: page.getByRole("heading", { name: "上海交通大学" }),
     });
-    await expect(sjtu).toContainText("2025.09 — 2028.03");
+    await expect(sjtu).toContainText("2025.09 — 2028.03（预计）");
     await expect(sjtu).toContainText("安泰经济与管理学院");
     await expect(sjtu).toContainText("管理科学与工程 · 硕士");
     for (const course of [
@@ -109,10 +122,7 @@ for (const viewport of viewports) {
       await expect(swufe.getByText(item, { exact: true })).toBeVisible();
     }
 
-    const pageWidth = await page.evaluate(
-      () => document.documentElement.scrollWidth,
-    );
-    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+    await expectNoHorizontalOverflow(page, viewport.width);
   });
 }
 
@@ -129,17 +139,7 @@ test("education navigation lands below the header without private metrics", asyn
     /[1-9]\d*px/,
   );
 
-  const body = page.locator("body");
-  for (const privateMetric of [
-    "GPA",
-    "专业排名",
-    "单科成绩",
-    "CET",
-    "六级",
-    "四级",
-  ]) {
-    await expect(body).not.toContainText(privateMetric);
-  }
+  await expectNoForbiddenPublicTerms(page);
 });
 
 for (const viewport of viewports) {
@@ -211,10 +211,7 @@ for (const viewport of viewports) {
       await expect(image).toHaveAttribute("height", /\d+/);
     }
 
-    const pageWidth = await page.evaluate(
-      () => document.documentElement.scrollWidth,
-    );
-    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+    await expectNoHorizontalOverflow(page, viewport.width);
   });
 }
 
@@ -229,16 +226,7 @@ test("project links open safely and the ongoing experiment stays redacted", asyn
     await expect(link).toHaveAttribute("rel", /noopener/);
   }
 
-  const body = page.locator("body");
-  for (const sensitiveDetail of [
-    "客户名称",
-    "训练数据",
-    "模型参数",
-    "业务系统截图",
-    "准确率",
-  ]) {
-    await expect(body).not.toContainText(sensitiveDetail);
-  }
+  await expectNoForbiddenPublicTerms(page);
 });
 
 for (const viewport of viewports) {
@@ -287,10 +275,7 @@ for (const viewport of viewports) {
       contact.getByRole("link", { name: /GitHub.*azhan12138/ }),
     ).toHaveAttribute("href", "https://github.com/azhan12138");
 
-    const pageWidth = await page.evaluate(
-      () => document.documentElement.scrollWidth,
-    );
-    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+    await expectNoHorizontalOverflow(page, viewport.width);
   });
 }
 
@@ -315,20 +300,7 @@ test("journey and contact navigation work without exposing private resume data",
 
   await expect(page.locator("a[href^='tel:']")).toHaveCount(0);
   await expect(page.locator("a[download]")).toHaveCount(0);
-  for (const privateDetail of [
-    "15002873690@163.com",
-    "联系电话",
-    "手机号码",
-    "准确率",
-    "调用量",
-    "覆盖率",
-    "订单量",
-    "提升幅度",
-    "成本变化",
-    "下载简历",
-  ]) {
-    await expect(page.locator("body")).not.toContainText(privateDetail);
-  }
+  await expectNoForbiddenPublicTerms(page);
 });
 
 for (const viewport of releaseViewports) {
@@ -339,6 +311,16 @@ for (const viewport of releaseViewports) {
     await page.goto("./");
 
     await expect(page.getByRole("navigation", { name: "主要导航" })).toBeVisible();
+    for (const navigationLabel of [
+      "教育 / Education",
+      "探索 / Work",
+      "经历 / Journey",
+      "联系 / Contact",
+    ]) {
+      await expect(
+        page.getByRole("link", { name: navigationLabel }),
+      ).toBeVisible();
+    }
     await expect(page.getByRole("main")).toBeVisible();
     await expect(page.getByRole("contentinfo")).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
@@ -356,10 +338,7 @@ for (const viewport of releaseViewports) {
     ]);
     await expect(page.locator("footer#contact")).toBeVisible();
 
-    const pageWidth = await page.evaluate(
-      () => document.documentElement.scrollWidth,
-    );
-    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+    await expectNoHorizontalOverflow(page, viewport.width);
   });
 }
 
@@ -373,7 +352,7 @@ test("page metadata is ready for search and social sharing", async ({ page }) =>
   );
   await expect(page.locator("link[rel='canonical']")).toHaveAttribute(
     "href",
-    "https://azhan12138.github.io/personal_web/",
+    siteConfig.publicUrl,
   );
   await expect(page.locator("meta[property='og:title']")).toHaveAttribute(
     "content",
@@ -385,7 +364,7 @@ test("page metadata is ready for search and social sharing", async ({ page }) =>
   );
   await expect(page.locator("meta[property='og:image']")).toHaveAttribute(
     "content",
-    "https://azhan12138.github.io/personal_web/assets/portrait-primary.jpg",
+    new URL("assets/portrait-primary.jpg", siteConfig.publicUrl).href,
   );
 });
 
@@ -411,20 +390,7 @@ test("keyboard focus is visible and reduced motion keeps content available", asy
   }
 
   const html = await page.content();
-  for (const forbidden of [
-    "15002873690@163.com",
-    "GPA",
-    "专业排名",
-    "单科成绩",
-    "准确率",
-    "调用量",
-    "覆盖率",
-    "提升幅度",
-    "成本变化",
-    "THROWAWAY PROTOTYPE",
-    "Research Brief / 研究简报",
-    "Open Notebook / 开放笔记",
-  ]) {
-    expect(html).not.toContain(forbidden);
+  for (const term of privacyPolicy.forbiddenTerms) {
+    expect(html).not.toContain(term);
   }
 });

@@ -142,7 +142,7 @@ export const siteContent: SiteContent = {
       "从数据、建模与商业分析，到运筹优化、强化学习与智能体研究，我的学习路径也构成了今天做 AI 产品的底层方法。",
     entries: [
       {
-        period: "2025.09 — 2028.03",
+        period: "2025.09 — 2028.03（预计）",
         dateTime: "2025-09/2028-03",
         stage: "硕士在读",
         city: "上海",

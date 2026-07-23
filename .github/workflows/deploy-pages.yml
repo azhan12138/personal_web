@@ -46,7 +46,7 @@ jobs:
         run: pnpm verify:privacy
 
       - name: Run browser acceptance tests
-        run: pnpm test:e2e
+        run: pnpm exec playwright test
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'

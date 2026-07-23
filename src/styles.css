@@ -112,6 +112,20 @@ ol {
   border: 1px solid currentColor;
   font-family: var(--serif);
   font-size: 15px;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    transform 120ms ease;
+}
+
+.wordmark:hover,
+.wordmark:focus-visible {
+  color: var(--white);
+  background: var(--navy);
+}
+
+.wordmark:active {
+  transform: scale(0.96);
 }
 
 .nav-links {
@@ -122,6 +136,7 @@ ol {
 .nav-links a {
   position: relative;
   padding-block: 12px;
+  transition: opacity 120ms ease;
 }
 
 .nav-links a::after {
@@ -138,6 +153,12 @@ ol {
 .nav-links a:hover::after,
 .nav-links a:focus-visible::after {
   right: 0;
+}
+
+.nav-links a:active,
+.text-link:active,
+.footer-links a:active {
+  opacity: 0.62;
 }
 
 a:focus-visible {
@@ -855,12 +876,9 @@ a:focus-visible {
   }
 
   .nav-links {
-    gap: 12px;
-    font-size: 9px;
-  }
-
-  .nav-links a:nth-child(2) {
-    display: none;
+    gap: 9px;
+    font-size: 8px;
+    letter-spacing: 0.02em;
   }
 
   .hero {

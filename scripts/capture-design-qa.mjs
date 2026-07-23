@@ -2,8 +2,12 @@ import { mkdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
 
+const siteConfig = JSON.parse(
+  await readFile(new URL("../site.config.json", import.meta.url), "utf8"),
+);
 const targetUrl =
-  process.env.QA_URL ?? "http://127.0.0.1:4173/personal_web/";
+  process.env.QA_URL ??
+  new URL(siteConfig.basePath, "http://127.0.0.1:4173").href;
 const outputDirectory = new URL("../qa/screenshots/", import.meta.url);
 const sourceDirectory = new URL("../prototype/screenshots/", import.meta.url);
 const viewports = [

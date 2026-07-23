@@ -4,24 +4,10 @@ import { fileURLToPath } from "node:url";
 
 const outputDirectory = new URL("../dist/", import.meta.url);
 const textExtensions = new Set([".css", ".html", ".js", ".json", ".map", ".txt"]);
-const forbiddenTerms = [
-  "15002873690@163.com",
-  "联系电话",
-  "手机号码",
-  "GPA",
-  "专业排名",
-  "单科成绩",
-  "CET",
-  "准确率",
-  "调用量",
-  "覆盖率",
-  "订单量",
-  "提升幅度",
-  "成本变化",
-  "THROWAWAY PROTOTYPE",
-  "Research Brief / 研究简报",
-  "Open Notebook / 开放笔记",
-];
+const privacyPolicy = JSON.parse(
+  await readFile(new URL("../privacy-policy.json", import.meta.url), "utf8"),
+);
+const { approvedEmail, forbiddenTerms } = privacyPolicy;
 
 async function collectTextFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -45,10 +31,7 @@ const findings = [];
 
 for (const file of files) {
   const content = await readFile(file, "utf8");
-  const contentWithoutApprovedEmail = content.replaceAll(
-    "18702530496@163.com",
-    "",
-  );
+  const contentWithoutApprovedEmail = content.replaceAll(approvedEmail, "");
 
   for (const term of forbiddenTerms) {
     if (content.includes(term)) {
