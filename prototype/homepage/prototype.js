@@ -15,11 +15,15 @@ const links = {
 
 const arrow = `<span aria-hidden="true">↗</span>`;
 
-const nav = (modifier = "") => `
+const nav = (
+  modifier = "",
+  firstHref = "#work",
+  firstLabel = "探索 / Work",
+) => `
   <nav class="site-nav ${modifier}">
     <a class="wordmark" href="#top" aria-label="返回顶部">L·SZ</a>
     <div class="nav-links">
-      <a href="#work">探索 / Work</a>
+      <a href="${firstHref}">${firstLabel}</a>
       <a href="#journey">经历 / Journey</a>
       <a href="#contact">联系 / Contact</a>
     </div>
@@ -35,7 +39,7 @@ const projectLinks = (href, label = "查看 GitHub") => `
 function variantA() {
   return `
     <div class="page variant-a" id="top">
-      ${nav()}
+      ${nav("", "#education", "教育 / Education")}
 
       <header class="a-hero shell">
         <div class="a-hero-copy">
@@ -43,8 +47,8 @@ function variantA() {
           <h1>罗仕展，<br />在产品与智能体之间<br /><em>寻找新的创造方式。</em></h1>
           <p class="hero-statement">我想看看，AI 能不能让一个人的想法走得更远。</p>
           <div class="hero-actions">
-            <a class="button primary" href="#work">查看我的探索</a>
-            <a class="button ghost" href="${links.email}">发邮件聊聊</a>
+            <a class="button primary" href="#education">了解我的教育经历</a>
+            <a class="button ghost" href="#work">查看 AI 探索</a>
           </div>
         </div>
 
@@ -57,8 +61,112 @@ function variantA() {
         </figure>
       </header>
 
+      <section class="a-education shell section-rule" id="education">
+        <div class="education-intro">
+          <p class="section-index">01 / EDUCATION & ACADEMIC FOUNDATION</p>
+          <div>
+            <h2>教育经历，<br />是我理解问题的起点。</h2>
+            <p>
+              从数据、建模与商业分析，到运筹优化、强化学习与智能体研究，
+              我的学习路径也构成了今天做 AI 产品的底层方法。
+            </p>
+          </div>
+        </div>
+
+        <div class="education-list">
+          <article class="education-entry">
+            <div class="education-period">
+              <time>2025.09 — 2028.03</time>
+              <span>硕士在读 · 上海</span>
+            </div>
+            <div class="education-school">
+              <p>ANTAI COLLEGE OF ECONOMICS & MANAGEMENT</p>
+              <h3>上海交通大学</h3>
+              <strong>管理科学与工程 · 硕士</strong>
+              <span>
+                在运筹与数据分析的基础上，开始系统接触强化学习、智能体建模与仿真，
+                并持续在这一方向学习与深耕。
+              </span>
+            </div>
+            <div class="education-details">
+              <div class="education-detail">
+                <p>核心课程 / COURSEWORK</p>
+                <ul class="course-list">
+                  <li>运筹学：确定性模型</li>
+                  <li>运筹学：随机性模型</li>
+                  <li>计算文本分析</li>
+                  <li>强化学习</li>
+                  <li>多元统计分析</li>
+                  <li>智能体建模与仿真</li>
+                </ul>
+              </div>
+              <div class="education-detail">
+                <p>当前研究关注 / CURRENT FOCUS</p>
+                <p class="detail-copy">
+                  Agent 的决策、协作与模拟机制，以及它们如何进入真实产品与研发流程。
+                  相关研究仍在进行中。
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="education-entry">
+            <div class="education-period">
+              <time>2021.09 — 2025.06</time>
+              <span>本科 · 成都</span>
+            </div>
+            <div class="education-school">
+              <p>SCHOOL OF MANAGEMENT SCIENCE & ENGINEERING</p>
+              <h3>西南财经大学</h3>
+              <strong>大数据管理与应用 · 学士</strong>
+              <span>
+                在统计、编程与管理决策之间建立跨学科基础，
+                也通过研究与竞赛第一次把模型用于解释真实世界的问题。
+              </span>
+            </div>
+            <div class="education-details">
+              <div class="education-detail">
+                <p>核心课程 / COURSEWORK</p>
+                <ul class="course-list">
+                  <li>机器学习与数据挖掘</li>
+                  <li>统计学</li>
+                  <li>Python 程序设计</li>
+                  <li>数据库原理与应用</li>
+                  <li>管理决策模型与方法</li>
+                  <li>数据智能前沿</li>
+                </ul>
+              </div>
+              <div class="education-detail">
+                <p>代表荣誉 / HONORS</p>
+                <ul class="honor-list">
+                  <li>本科生国家奖学金</li>
+                  <li>四川省优秀毕业生</li>
+                  <li>感恩科学家奖学金</li>
+                  <li>校级三好学生</li>
+                </ul>
+              </div>
+              <div class="education-detail">
+                <p>代表竞赛 / COMPETITIONS</p>
+                <ol class="competition-list">
+                  <li>
+                    <time>2024</time>
+                    <span>全国市场调查与分析大赛</span>
+                    <strong>四川省一等奖</strong>
+                  </li>
+                  <li>
+                    <time>2023</time>
+                    <span>全国企业竞争模拟大赛</span>
+                    <strong>全国三等奖</strong>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="a-now shell section-rule">
-        <p class="section-index">01 / NOW</p>
+        <p class="section-index">02 / NOW</p>
         <div>
           <h2>专注 AI Native 的<br />AI 产品经理与独立开发者</h2>
         </div>
@@ -70,7 +178,7 @@ function variantA() {
 
       <section class="a-work shell" id="work">
         <div class="section-heading">
-          <p class="section-index">02 / SELECTED EXPLORATIONS</p>
+          <p class="section-index">03 / SELECTED EXPLORATIONS</p>
           <h2>探索不是答案，<br />是我留下的路径。</h2>
         </div>
 
@@ -135,7 +243,7 @@ function variantA() {
 
       <section class="a-journey shell section-rule" id="journey">
         <div class="section-heading compact">
-          <p class="section-index">03 / JOURNEY</p>
+          <p class="section-index">04 / JOURNEY</p>
           <h2>一路走来，问题在变，<br />好奇心没有。</h2>
         </div>
         <ol class="timeline-list">
@@ -150,7 +258,7 @@ function variantA() {
 
       <footer class="a-footer" id="contact">
         <div class="shell footer-grid">
-          <p class="section-index">04 / KEEP IN TOUCH</p>
+          <p class="section-index">05 / KEEP IN TOUCH</p>
           <h2>如果你也在想 AI 与人<br />还能怎样一起创造，<br /><em>欢迎来聊聊。</em></h2>
           <div class="footer-links">
             <a href="${links.email}">18702530496@163.com ${arrow}</a>
@@ -413,4 +521,3 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("popstate", () => render(getVariant()));
 render(getVariant());
-

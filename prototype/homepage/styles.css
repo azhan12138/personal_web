@@ -269,6 +269,183 @@ blockquote {
   line-height: 1.6;
 }
 
+.a-education {
+  padding-block: 100px 34px;
+}
+
+.education-intro {
+  display: grid;
+  grid-template-columns: 0.46fr 2fr;
+  gap: 60px;
+  align-items: start;
+  margin-bottom: 74px;
+}
+
+.education-intro h2 {
+  font-family: var(--serif);
+  font-size: clamp(38px, 4.2vw, 62px);
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.035em;
+}
+
+.education-intro > div > p {
+  max-width: 720px;
+  margin-top: 24px;
+  color: var(--slate);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.education-list {
+  border-top: 1px solid var(--line);
+}
+
+.education-entry {
+  display: grid;
+  grid-template-columns: 0.46fr 0.84fr 1.45fr;
+  gap: 54px;
+  padding-block: 50px 58px;
+  border-bottom: 1px solid var(--line);
+}
+
+.education-period {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.education-period time {
+  color: var(--teal);
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.education-period span {
+  color: var(--slate);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.education-school > p {
+  color: var(--slate);
+  font-size: 9px;
+  font-weight: 750;
+  line-height: 1.5;
+  letter-spacing: 0.11em;
+}
+
+.education-school h3 {
+  margin-top: 12px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.education-school strong {
+  display: block;
+  margin-top: 13px;
+  font-size: 15px;
+}
+
+.education-school > span {
+  display: block;
+  margin-top: 22px;
+  color: var(--slate);
+  font-size: 13px;
+  line-height: 1.85;
+}
+
+.education-details {
+  display: grid;
+  gap: 28px;
+}
+
+.education-detail {
+  padding-top: 28px;
+  border-top: 1px solid rgba(22, 40, 59, 0.14);
+}
+
+.education-detail:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.education-detail > p:first-child {
+  margin-bottom: 16px;
+  color: var(--teal);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.course-list,
+.honor-list,
+.competition-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course-list,
+.honor-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.course-list li,
+.honor-list li {
+  padding: 8px 10px;
+  border: 1px solid rgba(22, 40, 59, 0.18);
+  color: var(--navy);
+  background: rgba(255, 255, 255, 0.34);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.honor-list li {
+  border-color: rgba(177, 144, 90, 0.38);
+  background: rgba(177, 144, 90, 0.08);
+}
+
+.detail-copy {
+  color: var(--slate);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.competition-list {
+  border-top: 1px solid rgba(22, 40, 59, 0.14);
+}
+
+.competition-list li {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 14px;
+  align-items: baseline;
+  padding-block: 12px;
+  border-bottom: 1px solid rgba(22, 40, 59, 0.14);
+  font-size: 11px;
+}
+
+.competition-list time {
+  color: var(--teal);
+  font-family: var(--serif);
+  font-size: 15px;
+}
+
+.competition-list strong {
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
 .a-now {
   display: grid;
   grid-template-columns: 0.46fr 1.1fr 0.9fr;
@@ -1239,6 +1416,7 @@ blockquote {
 
   .a-hero,
   .a-now,
+  .education-entry,
   .a-project,
   .timeline-list li,
   .footer-grid,
@@ -1259,11 +1437,13 @@ blockquote {
   }
 
   .a-now,
+  .education-entry,
   .a-project,
   .timeline-list li {
     gap: 22px;
   }
 
+  .education-intro,
   .section-heading {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -1379,9 +1559,31 @@ blockquote {
   }
 
   .a-now,
+  .a-education,
   .a-work,
   .a-journey {
     padding-block: 70px;
+  }
+
+  .education-intro {
+    margin-bottom: 48px;
+  }
+
+  .education-entry {
+    padding-block: 38px 44px;
+  }
+
+  .education-school h3 {
+    font-size: 36px;
+  }
+
+  .competition-list li {
+    grid-template-columns: 40px 1fr;
+  }
+
+  .competition-list strong {
+    grid-column: 2;
+    white-space: normal;
   }
 
   .sprout-triptych,
@@ -1512,4 +1714,3 @@ blockquote {
     transition-duration: 0.01ms !important;
   }
 }
-
