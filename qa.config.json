@@ -1,0 +1,25 @@
+{
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "compareToSource": true,
+      "runCoreAcceptance": true
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 1024,
+      "compareToSource": false,
+      "runCoreAcceptance": false
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844,
+      "compareToSource": true,
+      "runCoreAcceptance": true
+    }
+  ]
+}
