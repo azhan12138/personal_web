@@ -136,3 +136,102 @@ test("education navigation lands below the header without private metrics", asyn
     await expect(body).not.toContainText(privateMetric);
   }
 });
+
+for (const viewport of viewports) {
+  test(`AI Native explorations are public-safe on ${viewport.name}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("./");
+
+    const focus = page.locator("#focus");
+    await expect(
+      focus.getByRole("heading", {
+        level: 2,
+        name: /AI Native.*AI 产品经理与独立开发者/s,
+      }),
+    ).toBeVisible();
+    await expect(focus).toContainText("正在学习");
+
+    const work = page.locator("#work");
+    for (const projectName of [
+      "Sprout / 芽",
+      "SoulCompanion",
+      "真实世界的视觉识别实验",
+    ]) {
+      await expect(
+        work.getByRole("heading", { level: 3, name: projectName }),
+      ).toBeVisible();
+    }
+
+    const sprout = work.getByRole("article").filter({
+      has: page.getByRole("heading", { name: "Sprout / 芽" }),
+    });
+    await expect(sprout).toContainText("长期目标");
+    await expect(sprout).toContainText("情绪记录");
+    await expect(sprout).toContainText("用户研究");
+    await expect(sprout).toContainText("PRD");
+    await expect(
+      sprout.getByRole("link", { name: /查看 Sprout GitHub/ }),
+    ).toHaveAttribute(
+      "href",
+      "https://github.com/azhan12138/sprout-app-clean",
+    );
+
+    const soul = work.getByRole("article").filter({
+      has: page.getByRole("heading", { name: "SoulCompanion" }),
+    });
+    await expect(soul).toContainText("记忆");
+    await expect(soul).toContainText("情绪状态");
+    await expect(soul).toContainText("主动关怀");
+    await expect(
+      soul.getByRole("link", { name: /查看 SoulCompanion GitHub/ }),
+    ).toHaveAttribute(
+      "href",
+      "https://github.com/azhan12138/SoulCompanion",
+    );
+
+    const experiment = work.getByRole("article").filter({
+      has: page.getByRole("heading", { name: "真实世界的视觉识别实验" }),
+    });
+    await expect(experiment).toContainText("进行中");
+    for (const step of ["Context", "Spec", "Implement", "Evaluate"]) {
+      await expect(experiment.getByText(step, { exact: true })).toBeVisible();
+    }
+    await expect(experiment).toContainText("真实数据验证");
+
+    for (const image of await work.getByRole("img").all()) {
+      await expect(image).toHaveAttribute("loading", "lazy");
+      await expect(image).toHaveAttribute("width", /\d+/);
+      await expect(image).toHaveAttribute("height", /\d+/);
+    }
+
+    const pageWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
+    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+  });
+}
+
+test("project links open safely and the ongoing experiment stays redacted", async ({
+  page,
+}) => {
+  await page.goto("./");
+
+  const externalLinks = page.locator("#work a[target='_blank']");
+  await expect(externalLinks).toHaveCount(2);
+  for (const link of await externalLinks.all()) {
+    await expect(link).toHaveAttribute("rel", /noopener/);
+  }
+
+  const body = page.locator("body");
+  for (const sensitiveDetail of [
+    "客户名称",
+    "训练数据",
+    "模型参数",
+    "业务系统截图",
+    "准确率",
+  ]) {
+    await expect(body).not.toContainText(sensitiveDetail);
+  }
+});

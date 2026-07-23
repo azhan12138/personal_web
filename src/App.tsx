@@ -157,6 +157,119 @@ function Education() {
   );
 }
 
+function CurrentFocus() {
+  const { currentFocus } = siteContent;
+
+  return (
+    <section
+      className="current-focus shell section-rule"
+      id="focus"
+      aria-labelledby="focus-title"
+    >
+      <p className="section-index">{currentFocus.eyebrow}</p>
+      <h2 id="focus-title">
+        {currentFocus.heading[0]}
+        <br />
+        {currentFocus.heading[1]}
+      </h2>
+      <p>{currentFocus.body}</p>
+    </section>
+  );
+}
+
+function Explorations() {
+  const { explorations } = siteContent;
+
+  return (
+    <section
+      className="explorations shell"
+      id="work"
+      aria-labelledby="work-title"
+    >
+      <div className="section-intro work-intro">
+        <p className="section-index">{explorations.eyebrow}</p>
+        <h2 id="work-title">
+          {explorations.heading[0]}
+          <br />
+          {explorations.heading[1]}
+        </h2>
+      </div>
+
+      <div className="project-list">
+        {explorations.projects.map((project) => (
+          <article className="project" key={project.title}>
+            <div className="project-meta">
+              <span>{project.index}</span>
+              <span>{project.type}</span>
+              <span>{project.period}</span>
+            </div>
+
+            <div className="project-copy">
+              <h3>{project.title}</h3>
+              <p className="project-lede">{project.lede}</p>
+              <p>{project.description}</p>
+              {project.link ? (
+                <a
+                  className="text-link"
+                  href={project.link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {project.link.label}
+                  <span aria-hidden="true"> ↗</span>
+                </a>
+              ) : null}
+            </div>
+
+            {project.images ? (
+              <figure
+                className={
+                  project.images.length > 1
+                    ? "project-media sprout-gallery"
+                    : "project-media soul-frame"
+                }
+                aria-label={`${project.title} 项目界面`}
+              >
+                {project.images.map((image) => (
+                  <img
+                    key={image.src}
+                    src={image.src}
+                    alt={image.alt}
+                    width={image.width}
+                    height={image.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ))}
+              </figure>
+            ) : null}
+
+            {project.process ? (
+              <figure
+                className="process-visual"
+                aria-label="经过公开性处理的视觉识别研发闭环"
+              >
+                <figcaption>
+                  LIMITED DISCLOSURE · RESEARCH IN PROGRESS
+                </figcaption>
+                <ol>
+                  {project.process.map((step, index) => (
+                    <li key={step}>
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <strong>{step}</strong>
+                    </li>
+                  ))}
+                </ol>
+                <p>REAL DATA VALIDATION · DETAILS WITHHELD</p>
+              </figure>
+            ) : null}
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function App() {
   return (
     <>
@@ -164,6 +277,8 @@ export function App() {
       <main id="top">
         <Hero />
         <Education />
+        <CurrentFocus />
+        <Explorations />
       </main>
     </>
   );

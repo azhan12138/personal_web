@@ -47,10 +47,46 @@ export interface EducationContent {
   readonly entries: readonly EducationEntry[];
 }
 
+export interface CurrentFocusContent {
+  readonly eyebrow: string;
+  readonly heading: readonly [string, string];
+  readonly body: string;
+}
+
+export interface ProjectImage {
+  readonly src: string;
+  readonly alt: string;
+  readonly width: number;
+  readonly height: number;
+}
+
+export interface ExplorationProject {
+  readonly index: string;
+  readonly type: string;
+  readonly period: string;
+  readonly title: string;
+  readonly lede: string;
+  readonly description: string;
+  readonly link?: {
+    readonly href: string;
+    readonly label: string;
+  };
+  readonly images?: readonly ProjectImage[];
+  readonly process?: readonly string[];
+}
+
+export interface ExplorationsContent {
+  readonly eyebrow: string;
+  readonly heading: readonly [string, string];
+  readonly projects: readonly ExplorationProject[];
+}
+
 export interface SiteContent {
   readonly navigation: readonly NavigationItem[];
   readonly hero: HeroContent;
   readonly education: EducationContent;
+  readonly currentFocus: CurrentFocusContent;
+  readonly explorations: ExplorationsContent;
 }
 
 export const siteContent: SiteContent = {
@@ -139,6 +175,84 @@ export const siteContent: SiteContent = {
             result: "全国三等奖",
           },
         ],
+      },
+    ],
+  },
+  currentFocus: {
+    eyebrow: "02 / NOW",
+    heading: ["专注 AI Native 的", "AI 产品经理与独立开发者"],
+    body:
+      "在上海交通大学攻读管理科学与工程硕士，我正在学习强化学习、智能体建模与仿真。从产品、智能体到独立开发，我持续探索如何和 AI 一起，把好奇心慢慢变成真实世界里的作品。",
+  },
+  explorations: {
+    eyebrow: "03 / SELECTED EXPLORATIONS",
+    heading: ["探索不是答案，", "是我留下的路径。"],
+    projects: [
+      {
+        index: "01",
+        type: "移动应用 · 独立开发",
+        period: "2026",
+        title: "Sprout / 芽",
+        lede:
+          "把长期目标、日常任务与情绪记录，变成一株会慢慢生长的植物。",
+        description:
+          "我从用户研究与多轮 PRD 出发，用 AI 辅助工具完成产品设计、实现与迭代，跑通从问题定义到可用产品的独立开发闭环。它不只关注完成了多少，也关心一个人如何温和地继续前进。",
+        link: {
+          href: "https://github.com/azhan12138/sprout-app-clean",
+          label: "查看 Sprout GitHub",
+        },
+        images: [
+          {
+            src: "assets/sprout-habitat.jpg",
+            alt: "Sprout 栖息地页面",
+            width: 1080,
+            height: 2400,
+          },
+          {
+            src: "assets/sprout-labor.jpg",
+            alt: "Sprout 劳作页面",
+            width: 1080,
+            height: 2400,
+          },
+          {
+            src: "assets/sprout-review.jpg",
+            alt: "Sprout 回顾页面",
+            width: 1080,
+            height: 2400,
+          },
+        ],
+      },
+      {
+        index: "02",
+        type: "桌面智能体 · 开源实验",
+        period: "2026",
+        title: "SoulCompanion",
+        lede: "一个拥有记忆、情绪状态与主动关怀能力的桌面 AI 小伙伴。",
+        description:
+          "我在这个项目里持续探索：当 Agent 不只回答问题，而是能记住、理解并在合适的时候主动出现，人与 AI 的关系会发生什么变化。",
+        link: {
+          href: "https://github.com/azhan12138/SoulCompanion",
+          label: "查看 SoulCompanion GitHub",
+        },
+        images: [
+          {
+            src: "assets/soul-chat.png",
+            alt: "SoulCompanion 对话界面",
+            width: 894,
+            height: 507,
+          },
+        ],
+      },
+      {
+        index: "03",
+        type: "AI 视觉识别 · 进行中",
+        period: "NOW",
+        title: "真实世界的视觉识别实验",
+        lede:
+          "让 Spec、Agent 实现、独立评估与真实数据验证形成可恢复的研发闭环。",
+        description:
+          "项目仍在进行中。出于隐私与数据安全考虑，仅公开研究方向与方法，不展示业务数据和内部实现。",
+        process: ["Context", "Spec", "Implement", "Evaluate"],
       },
     ],
   },
