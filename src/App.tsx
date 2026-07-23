@@ -1,4 +1,40 @@
+import { useEffect } from "react";
 import { siteContent } from "./content";
+
+function useScrollReveal() {
+  useEffect(() => {
+    const elements = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-reveal]"),
+    );
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      elements.forEach((element) => element.classList.add("is-visible"));
+      return;
+    }
+
+    document.documentElement.classList.add("reveal-ready");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+
+    return () => {
+      observer.disconnect();
+      document.documentElement.classList.remove("reveal-ready");
+    };
+  }, []);
+}
 
 function SiteHeader() {
   return (
@@ -23,7 +59,11 @@ function Hero() {
   const { hero } = siteContent;
 
   return (
-    <section className="hero shell" aria-labelledby="hero-title">
+    <section
+      className="hero shell"
+      id="hero"
+      aria-labelledby="hero-title"
+    >
       <div className="hero-copy">
         <p className="eyebrow">{hero.eyebrow}</p>
         <h1 id="hero-title">
@@ -74,6 +114,7 @@ function Education() {
       className="education shell section-rule"
       id="education"
       aria-labelledby="education-title"
+      data-reveal
     >
       <div className="section-intro">
         <p className="section-index">{education.eyebrow}</p>
@@ -165,6 +206,7 @@ function CurrentFocus() {
       className="current-focus shell section-rule"
       id="focus"
       aria-labelledby="focus-title"
+      data-reveal
     >
       <p className="section-index">{currentFocus.eyebrow}</p>
       <h2 id="focus-title">
@@ -186,7 +228,7 @@ function Explorations() {
       id="work"
       aria-labelledby="work-title"
     >
-      <div className="section-intro work-intro">
+      <div className="section-intro work-intro" data-reveal>
         <p className="section-index">{explorations.eyebrow}</p>
         <h2 id="work-title">
           {explorations.heading[0]}
@@ -197,7 +239,7 @@ function Explorations() {
 
       <div className="project-list">
         {explorations.projects.map((project) => (
-          <article className="project" key={project.title}>
+          <article className="project" key={project.title} data-reveal>
             <div className="project-meta">
               <span>{project.index}</span>
               <span>{project.type}</span>
@@ -279,7 +321,7 @@ function Journey() {
       id="journey"
       aria-labelledby="journey-title"
     >
-      <div className="section-intro journey-intro">
+      <div className="section-intro journey-intro" data-reveal>
         <p className="section-index">{journey.eyebrow}</p>
         <h2 id="journey-title">
           {journey.heading[0]}
@@ -288,7 +330,7 @@ function Journey() {
         </h2>
       </div>
 
-      <ol className="timeline">
+      <ol className="timeline" data-reveal>
         {journey.milestones.map((milestone) => (
           <li key={`${milestone.year}-${milestone.title}`}>
             <time dateTime={milestone.dateTime}>{milestone.year}</time>
@@ -310,7 +352,7 @@ function SiteFooter() {
       id="contact"
       aria-labelledby="contact-title"
     >
-      <div className="footer-grid shell">
+      <div className="footer-grid shell" data-reveal>
         <p className="section-index">{contact.eyebrow}</p>
         <h2 id="contact-title">
           {contact.heading[0]}
@@ -339,6 +381,8 @@ function SiteFooter() {
 }
 
 export function App() {
+  useScrollReveal();
+
   return (
     <>
       <SiteHeader />

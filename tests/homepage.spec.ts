@@ -5,6 +5,11 @@ const viewports = [
   { name: "mobile", width: 390, height: 844 },
 ] as const;
 
+const releaseViewports = [
+  ...viewports,
+  { name: "tablet", width: 768, height: 1024 },
+] as const;
+
 for (const viewport of viewports) {
   test(`visitor can understand the homepage identity on ${viewport.name}`, async ({
     page,
@@ -323,5 +328,103 @@ test("journey and contact navigation work without exposing private resume data",
     "下载简历",
   ]) {
     await expect(page.locator("body")).not.toContainText(privateDetail);
+  }
+});
+
+for (const viewport of releaseViewports) {
+  test(`complete page keeps its intended structure on ${viewport.name}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("./");
+
+    await expect(page.getByRole("navigation", { name: "主要导航" })).toBeVisible();
+    await expect(page.getByRole("main")).toBeVisible();
+    await expect(page.getByRole("contentinfo")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+    await expect(page.getByRole("heading", { level: 2 })).toHaveCount(5);
+
+    const sectionOrder = await page.locator("main > section").evaluateAll(
+      (sections) => sections.map((section) => section.id),
+    );
+    expect(sectionOrder).toEqual([
+      "hero",
+      "education",
+      "focus",
+      "work",
+      "journey",
+    ]);
+    await expect(page.locator("footer#contact")).toBeVisible();
+
+    const pageWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
+    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+  });
+}
+
+test("page metadata is ready for search and social sharing", async ({ page }) => {
+  await page.goto("./");
+
+  await expect(page).toHaveTitle("罗仕展｜AI Native 产品经理与独立开发者");
+  await expect(page.locator("meta[name='description']")).toHaveAttribute(
+    "content",
+    "罗仕展的个人主页：上海交通大学硕士生，专注 AI Native 的 AI 产品经理与独立开发者。",
+  );
+  await expect(page.locator("link[rel='canonical']")).toHaveAttribute(
+    "href",
+    "https://azhan12138.github.io/personal_web/",
+  );
+  await expect(page.locator("meta[property='og:title']")).toHaveAttribute(
+    "content",
+    "罗仕展｜AI Native 产品经理与独立开发者",
+  );
+  await expect(page.locator("meta[property='og:description']")).toHaveAttribute(
+    "content",
+    /上海交通大学硕士生.*AI Native/,
+  );
+  await expect(page.locator("meta[property='og:image']")).toHaveAttribute(
+    "content",
+    "https://azhan12138.github.io/personal_web/assets/portrait-primary.jpg",
+  );
+});
+
+test("keyboard focus is visible and reduced motion keeps content available", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./");
+
+  await page.keyboard.press("Tab");
+  const focusedLink = page.getByRole("link", { name: "返回主页顶部" });
+  await expect(focusedLink).toBeFocused();
+  await expect(focusedLink).toHaveCSS("outline-style", "solid");
+
+  for (const region of [
+    page.locator("#education"),
+    page.locator("#focus"),
+    page.locator("#work"),
+    page.locator("#journey"),
+  ]) {
+    await expect(region).toHaveCSS("opacity", "1");
+    await expect(region).toHaveCSS("transform", "none");
+  }
+
+  const html = await page.content();
+  for (const forbidden of [
+    "15002873690@163.com",
+    "GPA",
+    "专业排名",
+    "单科成绩",
+    "准确率",
+    "调用量",
+    "覆盖率",
+    "提升幅度",
+    "成本变化",
+    "THROWAWAY PROTOTYPE",
+    "Research Brief / 研究简报",
+    "Open Notebook / 开放笔记",
+  ]) {
+    expect(html).not.toContain(forbidden);
   }
 });
