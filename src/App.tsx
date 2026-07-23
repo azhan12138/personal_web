@@ -270,6 +270,74 @@ function Explorations() {
   );
 }
 
+function Journey() {
+  const { journey } = siteContent;
+
+  return (
+    <section
+      className="journey shell section-rule"
+      id="journey"
+      aria-labelledby="journey-title"
+    >
+      <div className="section-intro journey-intro">
+        <p className="section-index">{journey.eyebrow}</p>
+        <h2 id="journey-title">
+          {journey.heading[0]}
+          <br />
+          {journey.heading[1]}
+        </h2>
+      </div>
+
+      <ol className="timeline">
+        {journey.milestones.map((milestone) => (
+          <li key={`${milestone.year}-${milestone.title}`}>
+            <time dateTime={milestone.dateTime}>{milestone.year}</time>
+            <strong>{milestone.title}</strong>
+            <p>{milestone.description}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+function SiteFooter() {
+  const { contact } = siteContent;
+
+  return (
+    <footer
+      className="site-footer"
+      id="contact"
+      aria-labelledby="contact-title"
+    >
+      <div className="footer-grid shell">
+        <p className="section-index">{contact.eyebrow}</p>
+        <h2 id="contact-title">
+          {contact.heading[0]}
+          <br />
+          {contact.heading[1]}
+          <br />
+          <em>{contact.heading[2]}</em>
+        </h2>
+        <div className="footer-links">
+          <a href={`mailto:${contact.email}`}>
+            {contact.email}
+            <span aria-hidden="true"> ↗</span>
+          </a>
+          <a
+            href={contact.github.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {contact.github.label}
+            <span aria-hidden="true"> ↗</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 export function App() {
   return (
     <>
@@ -279,7 +347,9 @@ export function App() {
         <Education />
         <CurrentFocus />
         <Explorations />
+        <Journey />
       </main>
+      <SiteFooter />
     </>
   );
 }

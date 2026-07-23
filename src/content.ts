@@ -81,12 +81,37 @@ export interface ExplorationsContent {
   readonly projects: readonly ExplorationProject[];
 }
 
+export interface JourneyMilestone {
+  readonly year: string;
+  readonly dateTime: string;
+  readonly title: string;
+  readonly description: string;
+}
+
+export interface JourneyContent {
+  readonly eyebrow: string;
+  readonly heading: readonly [string, string];
+  readonly milestones: readonly JourneyMilestone[];
+}
+
+export interface ContactContent {
+  readonly eyebrow: string;
+  readonly heading: readonly [string, string, string];
+  readonly email: string;
+  readonly github: {
+    readonly label: string;
+    readonly href: string;
+  };
+}
+
 export interface SiteContent {
   readonly navigation: readonly NavigationItem[];
   readonly hero: HeroContent;
   readonly education: EducationContent;
   readonly currentFocus: CurrentFocusContent;
   readonly explorations: ExplorationsContent;
+  readonly journey: JourneyContent;
+  readonly contact: ContactContent;
 }
 
 export const siteContent: SiteContent = {
@@ -255,5 +280,62 @@ export const siteContent: SiteContent = {
         process: ["Context", "Spec", "Implement", "Evaluate"],
       },
     ],
+  },
+  journey: {
+    eyebrow: "04 / JOURNEY",
+    heading: ["一路走来，问题在变，", "好奇心没有。"],
+    milestones: [
+      {
+        year: "2021",
+        dateTime: "2021",
+        title: "从数据与管理出发",
+        description:
+          "进入西南财经大学，建立统计、建模、编程与商业分析基础。",
+      },
+      {
+        year: "2023",
+        dateTime: "2023",
+        title: "用模型理解真实问题",
+        description:
+          "在研究、竞赛与团队协作中，学习把复杂问题转化为可分析、可行动的结构。",
+      },
+      {
+        year: "2024",
+        dateTime: "2024",
+        title: "从分析走向业务决策",
+        description:
+          "进入真实业务场景，开始用数据支持资源分配、运营判断与跨团队协作。",
+      },
+      {
+        year: "2025",
+        dateTime: "2025",
+        title: "开始做 AI 产品",
+        description:
+          "在源氏木语参与 AI 售后辅助、模拟对练与客服数据洞察产品，学习让智能体进入真实工作流。",
+      },
+      {
+        year: "2025—",
+        dateTime: "2025",
+        title: "研究智能体，也亲手创造",
+        description:
+          "进入上海交通大学攻读硕士，持续接触强化学习、智能体建模与仿真，也把研究问题带回产品实践。",
+      },
+      {
+        year: "现在",
+        dateTime: "2026",
+        title: "成为独立开发者",
+        description:
+          "把个人产品与 AI Native 研发方式，当作一场长期、公开但克制的实验。",
+      },
+    ],
+  },
+  contact: {
+    eyebrow: "05 / KEEP IN TOUCH",
+    heading: ["如果你也在想 AI 与人", "还能怎样一起创造，", "欢迎来聊聊。"],
+    email: "18702530496@163.com",
+    github: {
+      label: "GitHub / azhan12138",
+      href: "https://github.com/azhan12138",
+    },
   },
 };

@@ -235,3 +235,93 @@ test("project links open safely and the ongoing experiment stays redacted", asyn
     await expect(body).not.toContainText(sensitiveDetail);
   }
 });
+
+for (const viewport of viewports) {
+  test(`journey and contact are complete on ${viewport.name}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("./");
+
+    const journey = page.locator("#journey");
+    await expect(
+      journey.getByRole("heading", {
+        level: 2,
+        name: /一路走来.*好奇心没有/s,
+      }),
+    ).toBeVisible();
+
+    const milestones = journey.getByRole("listitem");
+    await expect(milestones).toHaveCount(6);
+    for (const milestone of [
+      "从数据与管理出发",
+      "用模型理解真实问题",
+      "从分析走向业务决策",
+      "开始做 AI 产品",
+      "研究智能体，也亲手创造",
+      "成为独立开发者",
+    ]) {
+      await expect(journey.getByText(milestone, { exact: true })).toBeVisible();
+    }
+    await expect(journey).toContainText("源氏木语");
+    await expect(journey).toContainText("AI 售后辅助");
+    await expect(journey).toContainText("模拟对练");
+    await expect(journey).toContainText("客服数据洞察");
+
+    const contact = page.locator("#contact");
+    await expect(
+      contact.getByRole("heading", {
+        level: 2,
+        name: /如果你也在想 AI 与人.*欢迎来聊聊/s,
+      }),
+    ).toBeVisible();
+    await expect(
+      contact.getByRole("link", { name: "18702530496@163.com" }),
+    ).toHaveAttribute("href", "mailto:18702530496@163.com");
+    await expect(
+      contact.getByRole("link", { name: /GitHub.*azhan12138/ }),
+    ).toHaveAttribute("href", "https://github.com/azhan12138");
+
+    const pageWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
+    expect(pageWidth).toBeLessThanOrEqual(viewport.width);
+  });
+}
+
+test("journey and contact navigation work without exposing private resume data", async ({
+  page,
+}) => {
+  await page.goto("./");
+
+  await page.getByRole("link", { name: "经历 / Journey" }).click();
+  await expect(page).toHaveURL(/#journey$/);
+  await expect(page.locator("#journey")).toBeInViewport();
+
+  await page.getByRole("link", { name: "联系 / Contact" }).click();
+  await expect(page).toHaveURL(/#contact$/);
+  await expect(page.locator("#contact")).toBeInViewport();
+
+  const github = page.locator("#contact").getByRole("link", {
+    name: /GitHub.*azhan12138/,
+  });
+  await expect(github).toHaveAttribute("target", "_blank");
+  await expect(github).toHaveAttribute("rel", /noopener/);
+
+  await expect(page.locator("a[href^='tel:']")).toHaveCount(0);
+  await expect(page.locator("a[download]")).toHaveCount(0);
+  for (const privateDetail of [
+    "15002873690@163.com",
+    "联系电话",
+    "手机号码",
+    "准确率",
+    "调用量",
+    "覆盖率",
+    "订单量",
+    "提升幅度",
+    "成本变化",
+    "下载简历",
+  ]) {
+    await expect(page.locator("body")).not.toContainText(privateDetail);
+  }
+});
