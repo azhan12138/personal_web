@@ -1,0 +1,8 @@
+{
+  "name": "personal-homepage-prototype",
+  "private": true,
+  "scripts": {
+    "prototype": "python3 -m http.server 4173 --directory prototype/homepage"
+  }
+}
+

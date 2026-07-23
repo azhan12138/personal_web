@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="罗仕展个人主页视觉原型：三种结构，通过 ?variant=A|B|C 切换。"
+    />
+    <title>罗仕展 · Personal Web Prototype</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- Prototype question: which information structure best balances business credibility, student idealism, and AI Native exploration? -->
+    <main id="prototype-root"></main>
+
+    <aside class="prototype-switcher" aria-label="原型版本切换器">
+      <button id="previous-variant" type="button" aria-label="上一个版本">←</button>
+      <div>
+        <span class="prototype-kicker">THROWAWAY PROTOTYPE</span>
+        <strong id="variant-label">A</strong>
+      </div>
+      <button id="next-variant" type="button" aria-label="下一个版本">→</button>
+    </aside>
+
+    <script src="./prototype.js"></script>
+  </body>
+</html>
+
