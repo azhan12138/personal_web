@@ -3,3 +3,7 @@ dist/
 .DS_Store
 prototype/screenshots/
 .tools/
+playwright-report/
+test-results/
+.env
+.env.local
