@@ -1,5 +1,6 @@
 export interface NavigationItem {
-  readonly label: string;
+  readonly labelZh: string;
+  readonly labelEn: string;
   readonly href: `#${string}`;
 }
 
@@ -116,10 +117,10 @@ export interface SiteContent {
 
 export const siteContent: SiteContent = {
   navigation: [
-    { label: "教育 / Education", href: "#education" },
-    { label: "探索 / Work", href: "#work" },
-    { label: "经历 / Journey", href: "#journey" },
-    { label: "联系 / Contact", href: "#contact" },
+    { labelZh: "教育", labelEn: "Education", href: "#education" },
+    { labelZh: "探索", labelEn: "Work", href: "#work" },
+    { labelZh: "经历", labelEn: "Journey", href: "#journey" },
+    { labelZh: "联系", labelEn: "Contact", href: "#contact" },
   ],
   hero: {
     eyebrow: "AI PRODUCT · INDEPENDENT BUILDER · 2026",

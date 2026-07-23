@@ -4,7 +4,7 @@ import qaConfig from "../qa.config.json" with { type: "json" };
 import siteConfig from "../site.config.json" with { type: "json" };
 
 const viewports = qaConfig.viewports.filter(
-  (viewport) => viewport.compareToSource,
+  (viewport) => viewport.runCoreAcceptance,
 );
 const releaseViewports = qaConfig.viewports;
 
